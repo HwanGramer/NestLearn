@@ -26,7 +26,7 @@ export class BoardsController {
     //? @Body(key?: string)	req.body / req.body[key]
     //? @Query(key?: string)	req.query / req.query[key]
     //? @Headers(name?: string)	req.headers / req.headers[name]
-    //? @Ip()	req.ip
+    //? @Ip()	req.ip   
     //? @HttpCode(status:number)	 
     @Post('/')
     createBoard(@Body('title') title : string, @Body('description') description : string , @Req() req : Request) : Board {
