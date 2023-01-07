@@ -1,6 +1,6 @@
-import { Body, Controller, Delete, Get, Param, Post, Req} from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Put, Req} from '@nestjs/common';
 import { Request } from 'express';
-import { Board } from './board.model';
+import { Board, BoardStatus } from './board.model';
 import { BoardsService } from './boards.service';
 import { CreateBoardDto } from './dto/create-board.dto';
 
@@ -47,6 +47,12 @@ export class BoardsController {
     @Delete('/:id')
     deleteBoardByID(@Param('id') id : string) : object{
         return this.boardsService.deleteBoardById(id);
-    } 
+    }
+
+
+    @Patch('/:id/status')                               //? Body안에 이름 써야됨.
+    updateBoardStatus(@Param('id') id : string , @Body('status') status : BoardStatus) : Board{
+        return this.boardsService.updateBoardStatus(id , status);
+    }
 
 }

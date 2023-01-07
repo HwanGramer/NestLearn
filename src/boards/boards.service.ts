@@ -36,12 +36,17 @@ export class BoardsService {
     }
 
     deleteBoardById(id : string) : object{
-
         this.boards.filter((element , index)=>{
             return element.id !== id;
         })
-
         return {suc : true , msg : '삭제성공'};
+    }
+
+    updateBoardStatus(id : string , status : BoardStatus) : Board{
+        const board : Board = this.getBoardById(id);
+        console.log(status);
+        board.status = status;
+        return board;
     }
 
 }
