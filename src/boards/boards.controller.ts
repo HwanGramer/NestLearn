@@ -1,7 +1,8 @@
-import { Body, Controller, Get, Post, Req} from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Req} from '@nestjs/common';
 import { Request } from 'express';
 import { Board } from './board.model';
 import { BoardsService } from './boards.service';
+import { CreateBoardDto } from './dto/create-board.dto';
 
 @Controller('/boards')
 export class BoardsController {
@@ -29,11 +30,23 @@ export class BoardsController {
     //? @Ip()	req.ip   
     //? @HttpCode(status:number)	 
     @Post('/')
-    createBoard(@Body('title') title : string, @Body('description') description : string , @Req() req : Request) : Board {
+    createBoard(@Body() createBoardDto : CreateBoardDto, @Req() req : Request) : Board {
         console.log(req.body);
         // console.log(title);
         // console.log(description);
-        return this.boardsService.createBoard(title , description);
+        return this.boardsService.createBoard(createBoardDto);
     }
+
+
+    //? 파라미터가 여러개가 있을경우 ( @Params() params : string[] ) 이렇게도 가능.
+    @Get('/:id')
+    getBoardById(@Param('id') id : string) : Board{
+        return this.boardsService.getBoardById(id);
+    }
+
+    @Delete('/:id')
+    deleteBoardByID(@Param('id') id : string) : object{
+        return this.boardsService.deleteBoardById(id);
+    } 
 
 }
