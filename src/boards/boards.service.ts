@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { Board, BoardStatus } from './board.model';
 import {v1 as uuid} from 'uuid';
 import { CreateBoardDto } from './dto/create-board.dto';
@@ -30,9 +30,15 @@ export class BoardsService {
     }
 
     getBoardById(id : string) : Board{
-        return this.boards.find((borad)=>{
+        const found = this.boards.find((borad)=>{
             return borad.id === id;
         }) //? borads에서 파라미터로 넘어온 id와 같은걸 리턴한다.
+
+        if(!found){ //? 해당하는 아이디의 결과값이 없으면 에러를 던진다. 이렇게 안에다가 커스텀 할 수 있네 
+            throw new NotFoundException({status : false , msg : 'Not Find Id'});
+        }
+
+        return found;
     }
 
     deleteBoardById(id : string) : object{

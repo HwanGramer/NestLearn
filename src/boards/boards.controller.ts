@@ -1,8 +1,9 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Put, Req} from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Put, Req, UsePipes, ValidationPipe} from '@nestjs/common';
 import { Request } from 'express';
 import { Board, BoardStatus } from './board.model';
 import { BoardsService } from './boards.service';
 import { CreateBoardDto } from './dto/create-board.dto';
+import { BoardStatusValidationPipe } from './pipes/board-status-validation.pipe';
 
 @Controller('/boards')
 export class BoardsController {
@@ -29,7 +30,8 @@ export class BoardsController {
     //? @Headers(name?: string)	req.headers / req.headers[name]
     //? @Ip()	req.ip   
     //? @HttpCode(status:number)	 
-    @Post('/')
+    @Post('/') 
+    @UsePipes(ValidationPipe) //? NestJS의 기본 유효성체크Pipe 핸들러 파이프
     createBoard(@Body() createBoardDto : CreateBoardDto, @Req() req : Request) : Board {
         console.log(req.body);
         // console.log(title);
@@ -44,6 +46,11 @@ export class BoardsController {
         return this.boardsService.getBoardById(id);
     }
 
+    @Get('/test/:testId')
+    getBoardTest(@Param('testId') test : number) : object{
+        return {status : true , msg : test};
+    }
+
     @Delete('/:id')
     deleteBoardByID(@Param('id') id : string) : object{
         return this.boardsService.deleteBoardById(id);
@@ -51,7 +58,8 @@ export class BoardsController {
 
 
     @Patch('/:id/status')                               //? Body안에 이름 써야됨.
-    updateBoardStatus(@Param('id') id : string , @Body('status') status : BoardStatus) : Board{
+    updateBoardStatus(@Param('id') id : string     //? 파라미터 파이프임.
+    ,@Body('status' , BoardStatusValidationPipe) status : BoardStatus) : Board{
         return this.boardsService.updateBoardStatus(id , status);
     }
 
