@@ -12,4 +12,4 @@ export interface Board{ //* interface를 이용하여 모델의 타입들을 지
 export enum BoardStatus{
     PUBLIC = 'PUBLIC',
     PRIVATE = 'PRIVATE'
-}
+} 
